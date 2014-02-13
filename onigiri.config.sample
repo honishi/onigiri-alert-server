@@ -1,0 +1,35 @@
+[application]
+user=target_twitter_id
+
+[parse]
+application_id = parse_application_id
+rest_api_key = parse_rest_api_key
+
+[loggers]
+keys=root
+
+[logger_root]
+level=NOTSET
+handlers=file
+
+[handlers]
+keys=stdout,file
+
+[handler_stdout]
+class=StreamHandler
+level=NOTSET
+formatter=default
+args=(sys.stdout,)
+
+[handler_file]
+class=handlers.RotatingFileHandler
+level=NOTSET
+formatter=default
+args=(os.getcwd() + "/log/onigiri.log", 'a', (1*1024*1024), 9)
+
+[formatters]
+keys=default
+
+[formatter_default]
+format=[%(asctime)s] [%(levelname)s] [%(threadName)s] %(message)s
+datefmt=
