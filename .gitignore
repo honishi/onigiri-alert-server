@@ -1,7 +1,8 @@
 onigiri.config*
 !onigiri.config.sample
-
 push.env*
 !push.env.sample
+onigiri.env*
+!onigiri.env.sample
 
 log

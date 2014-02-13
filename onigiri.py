@@ -63,7 +63,7 @@ class OnigiriAlert(object):
         logging.debug(u'OnigiriAlert.listen() ended.')
 
     def notify(self, parsed):
-        message = parsed["title"] + ' ' + parsed["subtitle"]
+        message = "ライブ「{} {}」がはじまりました.".format(parsed["title"], parsed["subtitle"])
 
         headers = {'X-Parse-Application-Id': self.parse_application_id,
                    'X-Parse-REST-API-Key': self.parse_rest_api_key,

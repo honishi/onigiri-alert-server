@@ -8,6 +8,7 @@ logfile=${basedir}/log/onigiri.log
 nohupfile=${basedir}/log/nohup.out
 pgrep_target="python ${program}"
 monitor_threshold=$((1*60))
+customenv=${basedir}/onigiri.env
 
 start() {
   if [ 0 -lt $(pgrep -f "${pgrep_target}" | wc -l) ]
@@ -48,6 +49,10 @@ monitor() {
 }
 
 cd ${basedir}
+
+if [ -e ${customenv} ]; then
+    source ${customenv}
+fi
 
 case "$1" in
   start)

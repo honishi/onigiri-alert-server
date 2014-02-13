@@ -3,8 +3,14 @@
 set -e
 
 basedir=$(cd $(dirname $0);pwd)
+envfile=${basedir}/push.env
 
-source ${basedir}/push.env
+if [ $# -eq 1 ]; then
+  envfile=${1}
+fi
+
+echo using envfile ${envfile}
+source ${envfile}
 
 curl -X POST \
   -H "X-Parse-Application-Id: ${APPLICATION_ID}" \
