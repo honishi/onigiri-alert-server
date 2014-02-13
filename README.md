@@ -1,6 +1,10 @@
 Onigiri Alert Server
 ==
 
+sequence
+--
+![sequence](./document/sequence.png)
+
 setup
 --
 ````

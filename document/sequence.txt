@@ -1,0 +1,24 @@
+# title Sequence Overview
+
+participant alert\nclient as cli
+participant alert\nserver as srv
+participant apns as apns
+participant parse.com as ps
+participant twitcasting as tc
+
+autonumber 1
+
+cli->apns: request registration
+apns->cli: device token
+cli->ps: request registration\nw/ device token
+ps->cli: ok
+
+loop polling every 3 sec
+srv->tc: http get
+tc->srv: response as json
+end
+
+srv->ps: request push notification
+ps->apns: request\npush notification
+apns->cli: push notification
+cli->cli: launch viewer
