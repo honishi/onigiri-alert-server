@@ -21,7 +21,8 @@ curl -X POST \
           "deviceType": "ios"
         },
         "data": {
-          "alert": "テストアラートです."
+          "alert": "テストアラートです.",
+          "sound": "horagai.aiff"
         }
       }' \
   https://api.parse.com/1/push

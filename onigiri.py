@@ -70,7 +70,7 @@ class OnigiriAlert(object):
                    'Content-Type': 'application/json'}
 
         parameters = {'where': {'deviceType': 'ios'},
-                      'data': {'alert': message, 'sound': 'default'}}
+                      'data': {'alert': message, 'sound': 'horagai.aiff'}}
         dumped_parameters = json.dumps(parameters).encode('utf-8')
 
         request = urllib.request.Request(PARSE_API_PUSH, dumped_parameters, headers)
