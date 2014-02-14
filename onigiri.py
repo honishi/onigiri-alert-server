@@ -16,7 +16,7 @@ CONFIG_FILE = os.path.dirname(os.path.abspath(__file__)) + '/onigiri.config'
 
 TWITCASTING_API_LIVE_STATUS = 'http://api.twitcasting.tv/api/livestatus'
 PARSE_API_PUSH = 'https://api.parse.com/1/push'
-POLLING_INTERVAL = 3
+POLLING_INTERVAL = 2
 
 # DEBUG_FORCE_PUSH = True
 DEBUG_FORCE_PUSH = False
@@ -70,7 +70,7 @@ class OnigiriAlert(object):
                    'Content-Type': 'application/json'}
 
         parameters = {'where': {'deviceType': 'ios'},
-                      'data': {'alert': message}}
+                      'data': {'alert': message, 'sound': 'default'}}
         dumped_parameters = json.dumps(parameters).encode('utf-8')
 
         request = urllib.request.Request(PARSE_API_PUSH, dumped_parameters, headers)

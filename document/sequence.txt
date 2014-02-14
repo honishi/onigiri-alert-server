@@ -13,7 +13,7 @@ apns->cli: device token
 cli->ps: request registration\nw/ device token
 ps->cli: ok
 
-loop polling every 3 sec
+loop polling every 2 sec
 srv->tc: http get
 tc->srv: response as json
 end
