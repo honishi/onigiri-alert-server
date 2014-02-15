@@ -34,7 +34,7 @@ class OnigiriAlert(object):
         logging.debug(u'OnigiriAlert.listen() started.')
 
         url = TWITCASTING_API_LIVE_STATUS + '?type=json&user=' + self.user
-        last_is_live = False
+        last_is_live = None
 
         while True:
             try:
@@ -47,7 +47,9 @@ class OnigiriAlert(object):
                 logging.debug(parsed)
                 is_live = parsed["islive"]
 
-                if last_is_live is False and is_live is True or DEBUG_FORCE_PUSH:
+                if last_is_live is None:
+                    pass
+                elif last_is_live is False and is_live is True or DEBUG_FORCE_PUSH:
                     self.notify(parsed)
                     if DEBUG_FORCE_PUSH:
                         os.sys.exit()
