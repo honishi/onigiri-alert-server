@@ -71,7 +71,7 @@ class OnigiriAlert(object):
                    'X-Parse-REST-API-Key': self.parse_rest_api_key,
                    'Content-Type': 'application/json'}
 
-        parameters = {'where': {'deviceType': 'ios'},
+        parameters = {'channels': ['default'],
                       'data': {'alert': message, 'sound': 'horagai.aiff'}}
         dumped_parameters = json.dumps(parameters).encode('utf-8')
 

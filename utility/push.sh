@@ -17,9 +17,9 @@ curl -X POST \
   -H "X-Parse-REST-API-Key: ${REST_API_KEY}" \
   -H "Content-Type: application/json" \
   -d '{
-        "where": {
-          "deviceType": "ios"
-        },
+        "channels": [
+          "default"
+        ],
         "data": {
           "alert": "テストアラートです.",
           "sound": "horagai.aiff"
