@@ -1,6 +1,42 @@
 <form method="post" action="/push">
-	<p><input type="radio" name="target" value="prod">test push to production devices.</p>
-	<p><input type="radio" name="target" value="dev" checked>test push to development devices.</p>
+	<p><u>time slot simulation:</u></p>
+	<p>
+		<input type="radio" name="timeslot" value="00" checked>00:00-
+		<input type="radio" name="timeslot" value="01">01:00-
+		<input type="radio" name="timeslot" value="02">02:00-
+		<input type="radio" name="timeslot" value="03">03:00-
+		<input type="radio" name="timeslot" value="04">04:00-
+		<input type="radio" name="timeslot" value="05">05:00-
+	</p>
+	<p>
+		<input type="radio" name="timeslot" value="06">06:00-
+		<input type="radio" name="timeslot" value="07">07:00-
+		<input type="radio" name="timeslot" value="08">08:00-
+		<input type="radio" name="timeslot" value="09">09:00-
+		<input type="radio" name="timeslot" value="10">10:00-
+		<input type="radio" name="timeslot" value="11">11:00-
+	</p>
+	<p>
+		<input type="radio" name="timeslot" value="12">12:00-
+		<input type="radio" name="timeslot" value="13">13:00-
+		<input type="radio" name="timeslot" value="14">14:00-
+		<input type="radio" name="timeslot" value="15">15:00-
+		<input type="radio" name="timeslot" value="16">16:00-
+		<input type="radio" name="timeslot" value="17">17:00-
+	</p>
+	<p>
+		<input type="radio" name="timeslot" value="18">18:00-
+		<input type="radio" name="timeslot" value="19">19:00-
+		<input type="radio" name="timeslot" value="20">20:00-
+		<input type="radio" name="timeslot" value="21">21:00-
+		<input type="radio" name="timeslot" value="22">22:00-
+		<input type="radio" name="timeslot" value="23">23:00-
+	</p>
+	<p><u>device type of test push:</u></p>
+		<input type="radio" name="target" value="prod">push to production devices.
+		<input type="radio" name="target" value="dev" checked>push to development devices.
+	</p>
+	<p><u>password for test push:</u></p>
 	<p><input type="text" name="password" placeholder="password" /></p>
 	<p><input type="submit" value="push" /></p>
 </form>

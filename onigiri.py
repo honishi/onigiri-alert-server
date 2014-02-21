@@ -9,6 +9,7 @@ import configparser
 import urllib.request
 import urllib.parse
 import json
+import datetime
 import time
 
 
@@ -65,13 +66,14 @@ class OnigiriAlert(object):
         logging.debug(u'OnigiriAlert.listen() ended.')
 
     def notify(self, parsed):
-        message = "ライブ「{} {}」がはじまりました.".format(parsed["title"], parsed["subtitle"])
-
         headers = {'X-Parse-Application-Id': self.parse_application_id,
                    'X-Parse-REST-API-Key': self.parse_rest_api_key,
                    'Content-Type': 'application/json'}
 
-        parameters = {'channels': ['default'],
+        channel = 'ts{0:02d}'.format(datetime.datetime.now().hour)
+        message = "ライブ「{} {}」がはじまりました.".format(parsed["title"], parsed["subtitle"])
+
+        parameters = {'channels': [channel],
                       'data': {'alert': message, 'sound': 'horagai.aiff'}}
         dumped_parameters = json.dumps(parameters).encode('utf-8')
 
