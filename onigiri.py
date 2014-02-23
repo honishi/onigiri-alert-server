@@ -71,7 +71,7 @@ class OnigiriAlert(object):
                    'Content-Type': 'application/json'}
 
         channel = 'ts{0:02d}'.format(datetime.datetime.now().hour)
-        message = "ライブ「{} {}」がはじまりました.".format(parsed["title"], parsed["subtitle"])
+        message = "配信「{}{}」がはじまりました.".format(parsed["title"], parsed["subtitle"])
 
         parameters = {'channels': [channel],
                       'data': {'alert': message, 'sound': 'horagai.aiff'}}
