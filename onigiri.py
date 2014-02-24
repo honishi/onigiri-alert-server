@@ -18,6 +18,7 @@ CONFIG_FILE = os.path.dirname(os.path.abspath(__file__)) + '/onigiri.config'
 TWITCASTING_API_LIVE_STATUS = 'http://api.twitcasting.tv/api/livestatus'
 PARSE_API_PUSH = 'https://api.parse.com/1/push'
 POLLING_INTERVAL = 2
+PUSH_EXPIRE_TIME = 60 * 60  # 1h
 
 # DEBUG_FORCE_PUSH = True
 DEBUG_FORCE_PUSH = False
@@ -72,14 +73,17 @@ class OnigiriAlert(object):
 
         channel = 'ts{0:02d}'.format(datetime.datetime.now().hour)
         message = "配信「{}{}」がはじまりました.".format(parsed["title"], parsed["subtitle"])
+        expire = int(time.time()) + PUSH_EXPIRE_TIME
 
         parameters = {'channels': [channel],
-                      'data': {'alert': message, 'sound': 'horagai.aiff'}}
+                      'data': {'alert': message, 'sound': 'horagai.aiff'},
+                      'expiration_time' : expire}
         dumped_parameters = json.dumps(parameters).encode('utf-8')
+        logging.info(dumped_parameters)
 
         request = urllib.request.Request(PARSE_API_PUSH, dumped_parameters, headers)
         response = urllib.request.urlopen(request).read()
-        logging.debug(response)
+        logging.info(response)
 
 
 def main():

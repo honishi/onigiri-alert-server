@@ -18,6 +18,14 @@ fi
 echo using envfile ${envfile}
 source ${envfile}
 
+current_time=$(date '+%s')
+active_duration=$((60 * 60))  # = 1h
+expire_time=$((${current_time} + ${active_duration}))
+
+echo "current: ${current_time}"
+echo "active:  ${active_duration}"
+echo "expire:  ${expire_time}"
+
 curl -X POST \
   -H "X-Parse-Application-Id: ${APPLICATION_ID}" \
   -H "X-Parse-REST-API-Key: ${REST_API_KEY}" \
@@ -29,6 +37,7 @@ curl -X POST \
         \"data\": {
           \"alert\": \"テストアラートです.\",
           \"sound\": \"horagai.aiff\"
-        }
+        },
+        \"expiration_time\": ${expire_time}
       }" \
   https://api.parse.com/1/push
