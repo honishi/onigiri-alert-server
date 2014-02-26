@@ -25,7 +25,7 @@ args=(sys.stdout,)
 class=handlers.RotatingFileHandler
 level=NOTSET
 formatter=default
-args=(os.getcwd() + "/log/onigiri.log", 'a', (1*1024*1024), 9)
+args=(os.getcwd() + "/log/onigiri.log", 'a', (10*1024*1024), 9)
 
 [formatters]
 keys=default
