@@ -5,6 +5,8 @@ implementation of rapid push notification for specified user's twitcasting live.
 * server implementation: https://github.com/honishi/onigiri-alert-server
 * client implementation: https://github.com/honishi/onigiri-alert-client
 
+binary available at [App Store](https://itunes.apple.com/jp/app/onigiri/id821353463).
+
 sample
 --
 ![screenshot](./document/screenshot.png)
