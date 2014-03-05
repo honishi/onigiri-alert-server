@@ -19,6 +19,9 @@ TWITCASTING_API_LIVE_STATUS = 'http://api.twitcasting.tv/api/livestatus'
 PARSE_API_PUSH = 'https://api.parse.com/1/push'
 POLLING_INTERVAL = 1.2
 PUSH_EXPIRE_TIME = 60 * 60  # 1h
+# LIVE_TOO_CLOSE_THREASHOLD is used for avoiding unnecessary alert that is caused by temporary
+# live blackout. (seconds)
+LIVE_TOO_CLOSE_THREASHOLD = 15
 
 # DEBUG_FORCE_PUSH = True
 DEBUG_FORCE_PUSH = False
@@ -37,8 +40,10 @@ class OnigiriAlert(object):
 
         url = TWITCASTING_API_LIVE_STATUS + '?type=json&user=' + self.user
         last_is_live = None
+        last_live_datetime = datetime.datetime.now() - datetime.timedelta(days=1)
 
         while True:
+            is_live_started = False
             try:
                 request = urllib.request.urlopen(url)
                 encoding = request.headers.get_content_charset()
@@ -51,12 +56,27 @@ class OnigiriAlert(object):
 
                 if last_is_live is None:
                     pass
-                elif last_is_live is False and is_live is True or DEBUG_FORCE_PUSH:
-                    self.notify(parsed)
+                elif last_is_live is False and is_live is True:
+                    is_live_started = True
+
+                last_is_live = is_live
+
+                # notification section
+                if is_live_started is True or DEBUG_FORCE_PUSH:
+                    timedelta_since_last_live = datetime.datetime.now() - last_live_datetime
+                    live_too_close_threashold = datetime.timedelta(
+                        seconds=LIVE_TOO_CLOSE_THREASHOLD)
+                    if timedelta_since_last_live < live_too_close_threashold:
+                        logging.info("live is too close to previous live, so skip. "
+                                     "last_live_datetime: {}".format(last_live_datetime))
+                    else:
+                        self.notify(parsed)
                     if DEBUG_FORCE_PUSH:
                         os.sys.exit()
 
-                last_is_live = is_live
+                if last_is_live is True:
+                    last_live_datetime = datetime.datetime.now()
+
                 # raise Exception('test exception')
             except Exception as error:
                 logging.error("caught exception in polling loop, error: [{}]".format(error))
@@ -66,6 +86,7 @@ class OnigiriAlert(object):
 
         logging.debug(u'OnigiriAlert.listen() ended.')
 
+# private methods
     def notify(self, parsed):
         headers = {'X-Parse-Application-Id': self.parse_application_id,
                    'X-Parse-REST-API-Key': self.parse_rest_api_key,
