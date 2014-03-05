@@ -40,8 +40,9 @@ class OnigiriAlert(object):
         last_live_datetime = datetime.datetime.now() - datetime.timedelta(days=1)
 
         while True:
-            is_live_started = False
             try:
+                is_live_started = False
+
                 request = urllib.request.urlopen(url)
                 encoding = request.headers.get_content_charset()
                 response = request.read().decode(encoding)
