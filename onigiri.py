@@ -23,9 +23,6 @@ PUSH_EXPIRE_TIME = 60 * 60  # 1h
 # live blackout. (seconds)
 LIVE_TOO_CLOSE_THREASHOLD = 15
 
-# DEBUG_FORCE_PUSH = True
-DEBUG_FORCE_PUSH = False
-
 
 class OnigiriAlert(object):
 # magic methods
@@ -62,7 +59,7 @@ class OnigiriAlert(object):
                 last_is_live = is_live
 
                 # notification section
-                if is_live_started is True or DEBUG_FORCE_PUSH:
+                if is_live_started is True:
                     timedelta_since_last_live = datetime.datetime.now() - last_live_datetime
                     live_too_close_threashold = datetime.timedelta(
                         seconds=LIVE_TOO_CLOSE_THREASHOLD)
@@ -71,8 +68,6 @@ class OnigiriAlert(object):
                                      "last_live_datetime: {}".format(last_live_datetime))
                     else:
                         self.notify(parsed)
-                    if DEBUG_FORCE_PUSH:
-                        os.sys.exit()
 
                 if last_is_live is True:
                     last_live_datetime = datetime.datetime.now()
