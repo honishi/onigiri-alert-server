@@ -18,7 +18,7 @@ CONFIG_FILE = os.path.dirname(os.path.abspath(__file__)) + '/onigiri.config'
 TWITCASTING_API_LIVE_STATUS = 'http://api.twitcasting.tv/api/livestatus'
 PARSE_API_PUSH = 'https://api.parse.com/1/push'
 POLLING_INTERVAL = 1.2
-PUSH_EXPIRE_TIME = 60 * 60  # 1h
+PUSH_EXPIRE_TIME = 60 * 5  # 5 min
 # LIVE_TOO_CLOSE_THREASHOLD is used for avoiding unnecessary alert that is caused by temporary
 # live blackout. (seconds)
 LIVE_TOO_CLOSE_THREASHOLD = 15
