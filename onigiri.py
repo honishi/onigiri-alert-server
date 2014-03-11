@@ -21,7 +21,7 @@ POLLING_INTERVAL = 1.2
 PUSH_EXPIRE_TIME = 60 * 3  # 3 min
 # LIVE_TOO_CLOSE_THREASHOLD is used for avoiding unnecessary alert that is caused by temporary
 # live interruption. (seconds)
-LIVE_TOO_CLOSE_THREASHOLD = 60 * 3  # 3 min
+LIVE_TOO_CLOSE_THREASHOLD = 60 * 2  # 2 min
 
 
 class OnigiriAlert(object):
