@@ -23,13 +23,20 @@ def push():
         if request.form['password'] != PASSWORD:
             return 'not allowed.'
 
-        timeslot = 'ts' + request.form['timeslot']
         env_file = None
         if request.form['target'] == 'prod':
             env_file = './push.env.prod'
         elif request.form['target'] == 'dev':
             env_file = './push.env.dev'
-        call(["./push.sh", timeslot, env_file])
+
+        timeslot = 'ts' + request.form['timeslot']
+
+        command = ["./push.sh", env_file, timeslot]
+        subchannel = request.form['subchannel']
+        if subchannel != '':
+            command.append(subchannel)
+
+        call(command)
 
         return "pushed.({})".format(datetime.datetime.now())
     return "request method not allowed."
