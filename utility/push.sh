@@ -9,33 +9,29 @@ basedir=$(cd $(dirname $0);pwd)
 # exit
 
 if ! [ $# -eq 2 -o $# -eq 3 ]; then
-  echo "usage:   \$ $0 envfile channel [subuser]"
+  echo "usage:   \$ $0 envfile channel [subchannel]"
   echo "example: \$ $0 ./push.env.dev ts02"
   echo "         \$ $0 ./push.env.dev ts02 user1"
   exit 1
 fi
 
-# envfile, channel, subuser
+# envfile, channel, subchannel
 
 envfile=${1}
 channel=${2}
-subuser=${3:-""}
-
-# if [ $# -eq 3 ]; then
-#   subuser=", \"${3}\": true"
-# fi
+subchannel=${3:-""}
 
 echo "-----"
-echo "envfile: ${envfile}"
-echo "channel: ${channel}"
-echo "subuser: ${subuser}"
+echo "envfile:    ${envfile}"
+echo "channel:    ${channel}"
+echo "subchannel: ${subchannel}"
 
 # where
 
 where="\"channels\": \"${channel}\""
 
-if [ ! -z ${subuser} ]; then
-  where="${where}, \"${3}\": true"
+if [ ! -z ${subchannel} ]; then
+  where="${where}, \"subChannels\": \"${subchannel}\""
 fi
 
 echo "-----"
