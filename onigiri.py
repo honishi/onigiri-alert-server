@@ -11,14 +11,13 @@ import urllib.parse
 import json
 import datetime
 import time
+import threading
 
 
 CONFIG_FILE = os.path.dirname(os.path.abspath(__file__)) + '/onigiri.config'
 
 TWITCASTING_API_LIVE_STATUS = 'http://api.twitcasting.tv/api/livestatus'
 PARSE_API_PUSH = 'https://api.parse.com/1/push'
-POLLING_INTERVAL = 1.2
-PUSH_EXPIRE_TIME = 60 * 10  # 10 min
 # LIVE_TOO_CLOSE_THREASHOLD is used for avoiding unnecessary alert that is caused by temporary
 # live interruption. (seconds)
 LIVE_TOO_CLOSE_THREASHOLD = 60 * 2  # 2 min
@@ -26,10 +25,15 @@ LIVE_TOO_CLOSE_THREASHOLD = 60 * 2  # 2 min
 
 class OnigiriAlert(object):
 # magic methods
-    def __init__(self, user, parse_application_id, parse_rest_api_key):
+    def __init__(self, user, sound, polling_interval, push_expire_time,
+                 parse_application_id, parse_rest_api_key, subchannel=''):
         self.user = user
+        self.sound = sound
+        self.polling_interval = polling_interval
+        self.push_expire_time = push_expire_time
         self.parse_application_id = parse_application_id
         self.parse_rest_api_key = parse_rest_api_key
+        self.subchannel = subchannel
 
 # public methods
     def listen(self):
@@ -78,7 +82,7 @@ class OnigiriAlert(object):
                 logging.error("caught exception in polling loop, error: [{}]".format(error))
                 # os.sys.exit()
 
-            time.sleep(POLLING_INTERVAL)
+            time.sleep(self.polling_interval)
 
         logging.debug(u'OnigiriAlert.listen() ended.')
 
@@ -90,11 +94,14 @@ class OnigiriAlert(object):
 
         channel = 'ts{0:02d}'.format(datetime.datetime.now().hour)
         message = "配信「{}{}」がはじまりました.".format(parsed["title"], parsed["subtitle"])
-        expire = int(time.time()) + PUSH_EXPIRE_TIME
+        expire = int(time.time()) + self.push_expire_time
 
-        parameters = {'channels': [channel],
-                      'data': {'alert': message, 'sound': 'horagai.aiff'},
+        parameters = {'where': {'channels': channel},
+                      'data': {'alert': message, 'sound': self.sound},
                       'expiration_time' : expire}
+        if self.subchannel != '':
+            parameters['where']['subChannels'] = self.subchannel
+
         dumped_parameters = json.dumps(parameters).encode('utf-8')
         logging.info(dumped_parameters)
 
@@ -114,18 +121,48 @@ def main():
     config.read(config_file)
 
     section = 'application'
-    user = config[section]['user']
+    main_user = config[section]['main_user']
+    main_sound = config[section]['main_sound']
+    sub_users = config[section]['sub_users'].split(',')
+    sub_sounds = config[section]['sub_sounds'].split(',')
+    polling_interval = float(config[section]['polling_interval'])
+    push_expire_time = int(config[section]['push_expire_time'])
 
     section = 'parse'
     parse_application_id = config[section]['application_id']
     parse_rest_api_key = config[section]['rest_api_key']
 
-    logging.debug("user:{} parse_application_id:{} parse_rest_api_key:{}".format(
-        user, parse_application_id, parse_rest_api_key))
+    logging.debug("main_user:{} main_sound:{} sub_users:{} sub_sounds:{} "
+            "polling_interval:{} push_expire_time: {} "
+                  "parse_application_id:{} parse_rest_api_key:{}"
+                  .format(main_user, main_sound, sub_users, sub_sounds,
+                          polling_interval, push_expire_time,
+                          parse_application_id, parse_rest_api_key))
 
     logging.info(u'started.')
-    onigiri = OnigiriAlert(user, parse_application_id, parse_rest_api_key)
-    onigiri.listen()
+    threads = []
+
+    # main user
+    onigiri = OnigiriAlert(main_user, main_sound, polling_interval, push_expire_time,
+                           parse_application_id, parse_rest_api_key)
+    thread = threading.Thread(name=main_user, target=onigiri.listen)
+    thread.start()
+    threads.append(thread)
+
+    # sub users
+    sound_index = 0
+    for sub_user in sub_users:
+        sub_sound = sub_sounds[sound_index]
+        onigiri = OnigiriAlert(sub_user, sub_sound, polling_interval, push_expire_time,
+                               parse_application_id, parse_rest_api_key, sub_user)
+        thread = threading.Thread(name=sub_user, target=onigiri.listen)
+        thread.start()
+        threads.append(thread)
+        sound_index += 1
+
+    for thread in threads:
+        thread.join()
+
     logging.info(u'ended.')
 
 
