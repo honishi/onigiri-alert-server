@@ -1,5 +1,14 @@
 [application]
-user=target_twitter_id
+# main target user
+main_user=xxxxx
+main_sound=horagai.aiff
+
+# sub target user, comma-separated multiple user
+sub_users=xxxxx,xxxxx
+sub_sounds=xxxxx.aiff,xxxxx.aiff
+
+polling_interval = 2.1
+push_expire_time = 600
 
 [parse]
 application_id = parse_application_id

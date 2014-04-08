@@ -101,6 +101,7 @@ class OnigiriAlert(object):
                       'expiration_time' : expire}
         if self.subchannel != '':
             parameters['where']['subChannels'] = self.subchannel
+            parameters['data']['username'] = self.subchannel
 
         dumped_parameters = json.dumps(parameters).encode('utf-8')
         logging.info(dumped_parameters)

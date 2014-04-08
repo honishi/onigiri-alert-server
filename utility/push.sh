@@ -29,13 +29,19 @@ echo "subchannel: ${subchannel}"
 # where
 
 where="\"channels\": \"${channel}\""
-
 if [ ! -z ${subchannel} ]; then
   where="${where}, \"subChannels\": \"${subchannel}\""
 fi
 
 echo "-----"
 echo "where: ${where}"
+
+# data
+
+data="\"alert\": \"テストアラートです.\", \"sound\": \"horagai.aiff\""
+if [ ! -z ${subchannel} ]; then
+  data="${data}, \"username\": \"${subchannel}\""
+fi
 
 # expire time
 
@@ -61,8 +67,7 @@ curl -X POST \
           ${where}
         },
         \"data\": {
-          \"alert\": \"テストアラートです.\",
-          \"sound\": \"horagai.aiff\"
+          ${data}
         },
         \"expiration_time\": ${expire_time}
       }" \
