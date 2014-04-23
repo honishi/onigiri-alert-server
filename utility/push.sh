@@ -46,7 +46,7 @@ fi
 # expire time
 
 current_time=$(date '+%s')
-active_duration=$((60 * 60))  # = 1h
+active_duration=$((60 * 10))  # = 10m
 expire_time=$((${current_time} + ${active_duration}))
 
 echo "-----"
